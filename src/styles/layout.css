@@ -1,0 +1,705 @@
+/* ============ Header ============ */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  transition:
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+/* Set from main.js once the page is scrolled (transparent over the hero). */
+.header.is-scrolled {
+  background-color: rgb(5 3 2 / 0.72);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.header__inner {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--edge);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: var(--logo-size);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav__list a {
+  font-family: var(--font-mono);
+  font-size: var(--nav-size);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  opacity: var(--link-idle-opacity);
+  transition: opacity 0.28s var(--ease);
+}
+
+.nav__list a:hover {
+  opacity: 1;
+}
+
+.nav__cta {
+  font-family: var(--font-mono);
+  font-size: var(--nav-size);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.nav__toggle {
+  display: none;
+}
+
+/* ============ Hero ============ */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.hero__image-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Fade the hero photo to black at the bottom, same trick as the section
+   3 → 4 seam: avoids a hard cut into section 2's flat black. Shared by
+   every breakpoint now — mobile/tablet hero is full-bleed too. */
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14rem; /* 224px */
+  background: linear-gradient(180deg, transparent 0%, var(--black) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============ Hero: cursor-trail vinyl discs ============ */
+
+.hero__vinyl-trail {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Position (outer) is written every rAF tick from JS as a plain
+   translate3d — no CSS transition here, or the transition would fight the
+   per-frame lerp and turn the chase janky. Entrance (inner: scale/rotate)
+   and opacity are the only things CSS transitions. */
+.vinyl-disc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(9rem, 24vw, 20rem);
+  aspect-ratio: 1 / 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.26s ease-out;
+  will-change: transform, opacity;
+}
+
+.vinyl-disc.is-visible {
+  opacity: 1;
+}
+
+.vinyl-disc__inner {
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%) scale(0.85) rotate(0deg);
+  transition: transform 0.26s ease-out;
+  will-change: transform;
+}
+
+.vinyl-disc.is-visible .vinyl-disc__inner {
+  transform: translate(-50%, -50%) scale(1) rotate(var(--enter-rot, 0deg));
+}
+
+.vinyl-disc__spin {
+  width: 100%;
+  height: 100%;
+  animation: vinyl-spin 5s linear infinite;
+  animation-play-state: paused;
+}
+
+.vinyl-disc.is-visible .vinyl-disc__spin {
+  animation-play-state: running;
+}
+
+.vinyl-disc__spin img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+@keyframes vinyl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--edge) 3.125rem;
+  max-width: 39.375rem; /* 630px */
+}
+
+.hero__title {
+  margin-bottom: 1rem;
+}
+
+.hero__text {
+  margin-bottom: 1.75rem;
+}
+
+/* ============ Section shared ============ */
+
+.section {
+  position: relative;
+  background: var(--black);
+}
+
+.section--groove {
+  padding-top: 5.5rem;
+}
+
+.section__head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding-inline: var(--edge);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  margin-bottom: 4rem;
+}
+
+.section__head .h2 {
+  margin-bottom: 1.5rem;
+}
+
+.section__eyebrow {
+  text-align: left;
+}
+
+.section__head .h3 {
+  margin-bottom: 1rem;
+}
+
+.section__head .body + .body {
+  margin-top: 1rem;
+}
+
+/* ============ Section 2: image pair ============ */
+
+.split-media {
+  display: flex;
+  width: 100%;
+  gap: 0.625rem; /* 10px */
+}
+
+.split-media__col {
+  width: calc(50% - 0.3125rem);
+  aspect-ratio: 6 / 5;
+  overflow: hidden;
+  background: #0a0705;
+}
+
+.split-media__col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============ Section 3: crafted to last ============ */
+
+.section--crafted {
+  padding-block: 6rem 4rem;
+  background: var(--black) var(--glow-soft);
+  text-align: center;
+}
+
+.section--crafted .display {
+  margin-bottom: 3.5rem;
+}
+
+.exploded {
+  width: 100%;
+  margin-bottom: 2.5rem;
+}
+
+.exploded__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2816 / 1584;
+}
+
+.exploded__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.exploded__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.exploded__lines polyline {
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 0.0625; /* ≈1px at the 900px desktop baseline (viewBox units, scales with the frame) */
+}
+
+.exploded__lines circle {
+  fill: var(--white);
+}
+
+.callout {
+  position: absolute;
+  text-align: left;
+}
+
+.callout.is-right {
+  text-align: right;
+}
+
+.callout__label {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--edge);
+}
+
+.stat {
+  text-align: left;
+}
+
+.stat__value {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--stat-size);
+  line-height: 0.9;
+  letter-spacing: -0.11em;
+  margin-bottom: 0.0625rem; /* 1px */
+}
+
+.stat__label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem; /* 2px */
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--muted);
+}
+
+/* ============ Contact ============ */
+
+.section--contact {
+  padding-top: 7rem;
+  background: var(--black) var(--glow-soft);
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--edge);
+  padding-bottom: 6rem;
+}
+
+.contact__title {
+  text-transform: uppercase;
+}
+
+.contact__intro {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--h3-size);
+  line-height: 1.3;
+  margin-bottom: 2rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 0.625rem; /* 10px */
+}
+
+.field input,
+.field textarea {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--white);
+  resize: none;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--white-50);
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 1.25rem; /* 20px */
+  margin-bottom: 1.25rem; /* 20px */
+  font-family: var(--font-sans);
+  font-size: var(--body-sm-size);
+  color: var(--white-70);
+}
+
+.consent input {
+  appearance: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.15rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.consent input:checked {
+  background: var(--white);
+}
+
+.consent strong {
+  font-weight: 600;
+  color: var(--white);
+}
+
+.btn--send {
+  width: 100%;
+  height: 3.25rem;
+}
+
+/* ============ Full-viewport sections (desktop) ============
+   Each section is sized to exactly one screen (100vw × 100vh); content
+   inside distributes with flexbox instead of fixed aspect ratios so it
+   always fills the available height without scrolling within a section.
+
+   `orientation: landscape` is required alongside the width, not just the
+   width alone — a portrait tablet (iPad Pro 12.9" is exactly 1024px wide
+   in portrait) would otherwise qualify as "desktop" and get sections
+   locked to `height: 100vh`. On a screen that's *taller* than it is wide,
+   that leaves most of a 100vh section empty (content sized for a wide
+   window sitting at the top of a tall box) — e.g. section 4 ends up with
+   the form packed at the top and a near-full-screen gap below it before
+   the footer. Below this same breakpoint (see responsive.css, tokens.css,
+   base.css, and the IS_COMPACT / layoutExplodedCallouts width checks in
+   JS), everything already flows by content height instead — so excluding
+   portrait tablets here routes them to that flow instead. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .hero {
+    height: 100vh;
+  }
+
+  .section--groove {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: calc(var(--header-h) + 2rem);
+    padding-bottom: 2rem;
+    box-sizing: border-box;
+  }
+
+  .section--groove .section__head {
+    flex-shrink: 0;
+    margin-bottom: 2rem;
+  }
+
+  .section--groove .split-media {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .section--groove .split-media__col {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  .section--crafted {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* The exploded-diagram photo becomes the section's own full-bleed
+     background — no separate frame/letterbox, no seam. */
+  .section--crafted .exploded {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  .section--crafted .exploded__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .section--crafted .exploded__img {
+    object-fit: cover;
+  }
+
+  .section--crafted .display {
+    position: relative;
+    z-index: 1;
+    margin-top: 6.25rem; /* 100px */
+    margin-bottom: 0;
+  }
+
+  .section--crafted .stats {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 4rem;
+    gap: var(--stat-gap);
+  }
+
+  /* Fade the photo to black at the very bottom of THIS section (rather than
+     bleeding a sibling's pseudo-element across the boundary, which is at the
+     mercy of stacking-context edge cases) so the cut into section 4's flat
+     black is never a hard line, regardless of stacking quirks. */
+  .section--crafted::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 14rem; /* 224px */
+    background: linear-gradient(180deg, transparent 0%, var(--black) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Same trick at the top, so the cut from section 2's flat black into this
+     photo is never a hard line either. z-index:1 (not 0, unlike ::after)
+     because ::before sits earlier in paint order than .exploded — at
+     z-index:0 the photo painted over it and hid the gradient entirely. */
+  .section--crafted::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 14rem; /* 224px */
+    background: linear-gradient(180deg, var(--black) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .section--crafted .stat {
+    flex: 0 0 auto;
+  }
+
+  .section--contact {
+    position: relative;
+    z-index: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: calc(var(--header-h) + 2.25rem);
+    box-sizing: border-box;
+  }
+
+  .section--contact .contact {
+    flex: 1;
+    min-height: 0;
+    align-content: start;
+    padding-bottom: 1.5rem;
+  }
+
+  .section--contact .footer {
+    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: 1.25rem;
+  }
+
+  .section--contact .footer__main {
+    padding-bottom: 1.5rem;
+  }
+
+  .section--contact .footer__bottom {
+    padding-block: 0.75rem;
+  }
+}
+
+/* ============ Footer ============ */
+
+.footer {
+  position: relative;
+  padding-top: 2.5rem;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(246 243 238 / 0.9) 50%,
+    transparent 100%
+  );
+}
+
+.footer__main {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--edge);
+  padding-bottom: 3rem;
+}
+
+.footer__main .logo {
+  justify-self: start;
+}
+
+.footer__nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--body-sm-size);
+  text-align: center;
+  justify-self: center;
+}
+
+.footer__social {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--body-sm-size);
+  text-align: right;
+  justify-self: end;
+}
+
+.footer__bottom {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: 1.25rem var(--edge);
+  font-family: var(--font-mono);
+  font-size: var(--caption-size);
+  color: var(--white-50);
+}
+
+.footer__bottom::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(246 243 238 / 0.9) 50%,
+    transparent 100%
+  );
+}
+
+.footer__bottom span:first-child {
+  justify-self: start;
+}
+
+.footer__bottom a {
+  justify-self: center;
+}
+
+.footer__bottom span:last-child {
+  justify-self: end;
+}

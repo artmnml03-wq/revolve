@@ -1,0 +1,180 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-size: 16px;
+  /* The actual scrolling box is <html>, not <body> — overflow-x:hidden on
+     body alone doesn't reliably stop horizontal scroll/scrollbars when a
+     descendant briefly overflows (e.g. a translateX'd element mid-reveal,
+     off-screen vertically but still contributing to document width). */
+  overflow-x: hidden;
+}
+
+/* Desktop: whole composition scales with the window, width-driven but
+   height-limited so nothing gets cropped in a short viewport.
+   `orientation: landscape` matters as much as the width here — a portrait
+   tablet (iPad Pro 12.9" is 1024×1366, right at this width) is tall, not
+   wide, and this width-driven clamp formula assumes a wide window. Without
+   the orientation check, a portrait 1024-wide tablet gets desktop-scaled
+   type sized for a screen shape it doesn't have. See the matching note on
+   the `@media (min-width: 1024px)` block in layout.css. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  html {
+    font-size: clamp(13px, min(100vw / 90, 100vh / 50), 20px);
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-size: var(--body-size);
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p,
+dl,
+dd {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  outline: none;
+}
+
+main {
+  padding-top: 0;
+}
+
+/* ---------- Type styles ---------- */
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--label-size);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.h1 {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--h1-size);
+  line-height: var(--h1-lh);
+  letter-spacing: var(--h1-spacing);
+}
+
+.h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--h2-size);
+  line-height: var(--h2-lh);
+  letter-spacing: var(--h2-spacing);
+}
+
+.h3 {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--h3-size);
+  line-height: var(--h3-lh);
+  letter-spacing: var(--h3-spacing);
+}
+
+.display {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--display-size);
+  line-height: var(--display-lh);
+  letter-spacing: var(--display-spacing);
+}
+
+.body {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--body-size);
+  line-height: var(--body-lh);
+  letter-spacing: var(--body-spacing);
+  color: var(--muted);
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.caption {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--caption-size);
+  color: var(--white-50);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  padding: 0 1.75rem;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.container {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--edge);
+}

@@ -1,0 +1,81 @@
+/* ============ Reveal mask (sections 2/3/4 headings & paragraphs) ============
+   .reveal-mask is added to the original block element (h2/h3/p/etc) by
+   wrapMaskReveal() in src/lib/animation.js — its own margins are untouched.
+   A small vertical buffer keeps the tight (0.9) heading line-heights from
+   clipping ascenders/descenders while the mask is doing its job. */
+.reveal-mask {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.1em;
+  margin-block: -0.1em;
+}
+
+.reveal-mask__inner {
+  display: block;
+  will-change: transform, opacity;
+}
+
+/* ============ Hero title words ============ */
+
+.hero-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ============ Vinyl logo (navbar + footer) ============ */
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32em;
+}
+
+.vinyl-logo {
+  display: block;
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  animation: vinyl-logo-spin 4s linear infinite;
+}
+
+@keyframes vinyl-logo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============ Footer / nav secondary links ============ */
+
+.footer__nav a,
+.footer__social a {
+  display: inline-block;
+  opacity: var(--link-idle-opacity);
+  transition: opacity 0.28s var(--ease);
+}
+
+.footer__nav a:hover,
+.footer__social a:hover {
+  opacity: 1;
+}
+
+/* ============ will-change for the rest of the GSAP-driven elements ============
+   A handful of elements, not applied broadly — keeping compositor layers to
+   what's actually animated. */
+.split-media__col,
+.callout,
+.stat__value-num,
+.stat__value-suffix,
+.stat__label,
+.footer,
+.form-row .field,
+.form > .field,
+.consent,
+.btn--send {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vinyl-logo {
+    animation: none;
+  }
+}

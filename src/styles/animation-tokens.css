@@ -1,0 +1,13 @@
+/* Mirrors src/lib/animation.js — keep both in sync if these ever change.
+   GSAP-driven animations read the JS constants directly; these vars exist
+   for the few spots that animate via plain CSS transitions instead. */
+:root {
+  --dur-base: 0.6s;
+  --dur-slow: 0.9s;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --stagger: 0.13s;
+
+  /* Idle opacity for secondary nav/footer links — one number, shared by
+     both places, hover fades to full opacity. */
+  --link-idle-opacity: 0.7;
+}
