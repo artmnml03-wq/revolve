@@ -39,7 +39,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* `clip`, NOT `hidden`: with overflow-x:hidden on both <html> and <body>
+     the body becomes its own scroll container (overflow-y computes to auto).
+     The footer waits for its reveal translated 40px down, so the body had
+     40px to scroll internally — on phones the first swipe went into that
+     inner scroller and iOS Safari often kept the page itself from moving.
+     `clip` cuts horizontal overflow the same way without creating a
+     scroll container. */
+  overflow-x: clip;
 }
 
 img {

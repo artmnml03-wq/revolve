@@ -145,6 +145,10 @@ mask-reveal текста и у mobile/tablet «fade-up» разная механ
   1024×768/1024×1366/1280×720/1366×650/1920×1080; на десктопе контент
   всех 100vh-секций помещается даже при высоте 650px.
 
+- Свайп на телефоне не листал страницу: `overflow-x:hidden` на html И body делал body
+  отдельным скролл-контейнером (+40px от футера `y:40` до его анимации) — первый свайп
+  уходил внутрь body. Теперь `body { overflow-x: clip }` (base.css). Не возвращать `hidden`.
+
 ## Публикация — GitHub Pages
 - `vite.config.js`: `base: process.env.BASE_PATH || "/"`; workflow
   `.github/workflows/deploy.yml` собирает с `BASE_PATH=/<имя репо>/`.
