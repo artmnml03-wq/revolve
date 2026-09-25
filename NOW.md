@@ -149,6 +149,13 @@ mask-reveal текста и у mobile/tablet «fade-up» разная механ
   отдельным скролл-контейнером (+40px от футера `y:40` до его анимации) — первый свайп
   уходил внутрь body. Теперь `body { overflow-x: clip }` (base.css). Не возвращать `hidden`.
 
+- Секция 3 на мобилке (≤599px): всё в одной grid-ячейке с явными отступами —
+  заголовок `margin-top: 9.125rem` (на 50px ниже прежнего), фото поднято
+  (`--crafted-frame-top: 2rem`), цифры на `--crafted-stats-gap: 5rem` ниже объектов
+  (объекты кончаются на `--crafted-obj-bottom: 0.64` высоты фото). Планшет/десктоп не менялись.
+- Фавикон: `public/favicon.svg` (пластинка из лого + светлый ободок) и
+  `public/apple-touch-icon.png` 180×180.
+
 ## Публикация — GitHub Pages
 - `vite.config.js`: `base: process.env.BASE_PATH || "/"`; workflow
   `.github/workflows/deploy.yml` собирает с `BASE_PATH=/<имя репо>/`.

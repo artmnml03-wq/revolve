@@ -318,12 +318,41 @@
        ~270px of floor under the objects. */
     --crafted-frame-h: 190vw;
     --crafted-zoom: 1;
+    /* Phones: everything is placed explicitly inside ONE grid cell instead
+       of "heading row + photo row, stats pinned to the photo's bottom" —
+       that left ~260px of empty dark photo under the heading and the
+       stats only ~12px below the record. Heading 50px lower than before
+       (6rem → 9.125rem), photo pulled up under it (its dark top fades in
+       behind the heading), stats a fixed gap below the objects. The
+       objects end at 64% of the photo box (zoom 1). */
+    --crafted-frame-top: 2rem;
+    --crafted-obj-bottom: 0.64;
+    --crafted-stats-gap: 5rem;
+    padding-top: 0;
+    padding-bottom: 2.5rem;
+  }
+
+  .section--crafted > .display {
+    grid-row: 2;
+    align-self: start;
+    position: relative;
+    z-index: 1;
+    margin-top: 9.125rem;
+  }
+
+  .exploded {
+    align-self: start;
+    margin-top: var(--crafted-frame-top);
   }
 
   .stats {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem 1rem;
-    padding-bottom: 1.5rem;
+    align-self: start;
+    margin-top: calc(
+      var(--crafted-frame-top) + var(--crafted-obj-bottom) * var(--crafted-frame-h) + var(--crafted-stats-gap)
+    );
+    padding-bottom: 0;
   }
 
   /* Caption under each stat number — 13px on phones. */
