@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Revolve reel</title>
+    <style>
+      @font-face { font-family: "Inter"; src: url(/fonts/inter-latin-800-normal.woff2) format("woff2"); font-weight: 800; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0c0907; font-family: "Inter", Arial, sans-serif; color: #f4f1ec; }
+
+      /* Dark warm stage, same mood as the site (#050302 + copper glow) but lighter than the devices'
+         black bezels, so the MacBook and iPhone don't sink into the background. */
+      #stage {
+        position: relative; width: 1080px; height: 1920px; overflow: hidden;
+        background:
+          radial-gradient(1000px 820px at 50% 47%, #3b2a1f 0%, rgba(59, 42, 31, 0) 72%),
+          radial-gradient(900px 500px at 50% 100%, rgba(120, 55, 20, 0.35) 0%, rgba(120, 55, 20, 0) 70%),
+          linear-gradient(#1d1713, #0c0907);
+      }
+
+      /* ── brand: the only text in the reel ── */
+      .brand { position: absolute; top: 262px; left: 50%; display: flex; align-items: center; gap: 22px; opacity: 0; }
+      .brand img { width: 76px; height: 76px; display: block; }
+      .brand span { font-weight: 800; font-size: 68px; line-height: 1; letter-spacing: -0.01em; text-transform: uppercase; }
+
+      /* ── MacBook ── */
+      .mac { position: absolute; left: 70px; top: 700px; width: 940px; opacity: 0; will-change: transform, opacity; }
+      .lid { position: relative; width: 940px; height: 610px; padding: 18px 20px 30px; background: #0c0c0d; border-radius: 26px 26px 6px 6px; box-shadow: inset 0 0 0 2px #303033, 0 0 0 1px rgba(255, 255, 255, 0.1); }
+      .mac .screen { position: relative; width: 900px; height: 562px; overflow: hidden; border-radius: 6px; background: #000; }
+      .notch { position: absolute; top: 0; left: 50%; width: 120px; height: 20px; transform: translateX(-50%); background: #0c0c0d; border-radius: 0 0 12px 12px; z-index: 2; }
+      .base { position: relative; width: 960px; height: 24px; margin-left: -10px; background: linear-gradient(#dcdde0, #b3b5ba); border-radius: 0 0 32px 32px; box-shadow: 0 34px 50px rgba(0, 0, 0, 0.45), 0 6px 10px rgba(0, 0, 0, 0.3); }
+      .base::before { content: ""; position: absolute; top: 0; left: 50%; width: 190px; height: 9px; transform: translateX(-50%); background: linear-gradient(#a7a9ae, #c5c7cb); border-radius: 0 0 12px 12px; }
+
+      /* ── iPhone ── */
+      .phone { position: absolute; left: 262px; top: 420px; width: 556px; height: 1168px; padding: 15px; background: #0c0c0d; border-radius: 90px; box-shadow: inset 0 0 0 3px #3b3b3f, 0 0 0 1px rgba(255, 255, 255, 0.12), 0 60px 90px rgba(0, 0, 0, 0.5); opacity: 0; will-change: transform, opacity; }
+      .phone::before, .phone::after { content: ""; position: absolute; width: 6px; background: #2a2a2d; border-radius: 3px; }
+      .phone::before { left: -6px; top: 230px; height: 66px; box-shadow: 0 94px 0 #2a2a2d; }
+      .phone::after { right: -6px; top: 300px; height: 120px; }
+      .phone .screen { position: relative; width: 526px; height: 1138px; overflow: hidden; border-radius: 76px; background: #000; }
+      .island { position: absolute; top: 18px; left: 50%; width: 140px; height: 40px; transform: translateX(-50%); background: #000; border-radius: 22px; z-index: 3; }
+      .tap { position: absolute; width: 96px; height: 96px; margin: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.55); box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.45); opacity: 0; z-index: 4; pointer-events: none; }
+
+      iframe { display: block; border: 0; background: #050302; transform-origin: 0 0; }
+      #fMac { width: 1440px; height: 900px; transform: scale(0.625); }
+      #fPhone { width: 375px; height: 812px; transform: scale(1.4); }
+
+      /* only the laptop may catch the real mouse (the invisible phone sits over its screen) */
+      #stage > :not(.mac) { pointer-events: none; }
+
+      /* the mouse pointer shown over the laptop screen (the real pointer is not part of a screenshot) */
+      .pointer { position: absolute; left: 0; top: 0; width: 22px; height: 30px; margin: -2px 0 0 -2px; opacity: 0; z-index: 6; pointer-events: none; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45)); }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <div class="brand" id="brand">
+        <img id="brandDisc" src="/site/img/vinyl-white.svg" alt="" />
+        <span>Revolve</span>
+      </div>
+
+      <div class="mac" id="mac">
+        <div class="lid">
+          <div class="screen">
+            <iframe id="fMac" src="/site/" onload="this.dataset.loaded = 1"></iframe>
+            <i class="notch"></i>
+          </div>
+        </div>
+        <div class="base"></div>
+      </div>
+
+      <div class="phone" id="phone">
+        <div class="screen">
+          <i class="island"></i>
+          <iframe id="fPhone" src="/site/" onload="this.dataset.loaded = 1"></iframe>
+          <i class="tap" id="tap1"></i>
+          <i class="tap" id="tap2"></i>
+        </div>
+      </div>
+
+      <svg class="pointer" id="pointer" viewBox="0 0 24 32"><path d="M2.5 2.5 L2.5 24.5 L8.3 19 L12.4 28.6 L16.4 26.9 L12.3 17.5 L20.5 17.5 Z" fill="#111" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+    </div>
+
+    <script>
+      // ───────────────────────── timeline ─────────────────────────
+      const FPS = 30;
+
+      const MAC_END = 17.4;                      // the laptop starts to leave
+      const SWAP = [MAC_END, MAC_END + 0.7];     // laptop out
+      const PHONE_IN = [MAC_END + 0.4, MAC_END + 1.4]; // phone in (starts as the laptop is nearly gone)
+      const PH = MAC_END + 1.6;                  // the phone is in place: its own clock starts here
+      const DURATION = PH + 15.0;
+      const OUTRO = [DURATION - 1.6, DURATION];
+      const COVER = 13.0;                        // Instagram cover: the laptop on "Crafted to last" with its callouts
+
+      // The page moves along a smooth curve through these stops:
+      // [arrival time in seconds, waypoint, seconds to rest there, how fast to pass it (1 = normal, less = slower)]
+      // Desktop: s0 hero · s1 "Feel the groove" · s2 "Crafted to last" (rests while the counters run) · s3 contact + footer
+      const MAC_WP = [[1.0, "s0", 4.2], [6.8, "s1", 2.0], [10.2, "s2", 3.0], [14.6, "s3", 1.8]];
+      // Phone: s0 hero · s1 groove text · s2 groove photos · s4 crafted (whole section on screen) · s5 contact · s6 footer
+      // (the menu opens only after the hero intro has typed the title in)
+      const PHONE_WP = [[PH, "s0", 3.4], [PH + 4.8, "s1", 0.8], [PH + 6.6, "s2", 0.9], [PH + 8.6, "s4", 2.2], [PH + 12.2, "s5", 0.6], [PH + 13.4, "s6", 0.6]];
+      const MENU = [PH + 1.8, PH + 2.8];         // burger opens, then closes (two taps)
+      const TAPS = [[PH + 1.7, PH + 2.15], [PH + 2.7, PH + 3.15]];
+
+      // The mouse pointer on the laptop: [time, where] in site pixels (1440×900). It wanders over the hero,
+      // so the site's own cursor trail of vinyl discs follows it (that effect only answers a real mouse).
+      const POINTER = [
+        [[1.4, { abs: [1180, 660] }], [2.2, { abs: [940, 440] }], [3.0, { abs: [700, 600] }], [3.8, { abs: [470, 400] }], [4.6, { abs: [780, 300] }], [5.2, { abs: [980, 380] }]],
+      ];
+
+      // ───────────────────────── helpers ─────────────────────────
+      const $ = (id) => document.getElementById(id);
+      const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+      const prog = (t, a, b) => clamp((t - a) / (b - a));
+      const E = {
+        io: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+        out: (t) => 1 - Math.pow(1 - t, 3),
+        sine: (t) => 0.5 - 0.5 * Math.cos(Math.PI * t),
+      };
+      const mac = $("mac"), phone = $("phone"), fMac = $("fMac"), fPhone = $("fPhone");
+      const brand = $("brand"), brandDisc = $("brandDisc"), pointer = $("pointer");
+      const taps = [$("tap1"), $("tap2")];
+
+      // ───────────────────── measuring the site ─────────────────────
+      // Scroll positions of the stops, read from the laid-out page (plain document flow, no sticky stages).
+      function measure(frame, compact) {
+        const w = frame.contentWindow, d = w.document, ih = w.innerHeight;
+        const end = d.documentElement.scrollHeight - ih;
+        const top = (sel) => d.querySelector(sel).getBoundingClientRect().top + w.scrollY;
+        const bottom = (sel) => d.querySelector(sel).getBoundingClientRect().bottom + w.scrollY;
+        const c = (y) => Math.round(clamp(y, 0, end));
+        // desktop: the footer lives inside the 100vh contact section, so "contact" is also the end of the page
+        if (!compact) return { s0: 0, s1: c(top("#about")), s2: c(top("#catalog")), s3: c(top("#contact")) };
+        return {
+          s0: 0,
+          s1: c(top("#about")),
+          s2: c(top(".split-media") - 90),
+          s3: c(top("#catalog")),
+          s4: c(bottom("#catalog") - ih),
+          s5: c(top("#contact")),
+          s6: c(end),
+        };
+      }
+
+      // ───────────────────── the scroll path ─────────────────────
+      // A smooth curve through the stops (monotone cubic: never overshoots, never goes back). The page comes to
+      // rest only where a stop says so; everywhere else it glides through at a speed set by its neighbours, so there
+      // is no start-stop rhythm. A short moving average on top removes the last sharp changes of acceleration.
+      function scrollPath(list, pos) {
+        const K = [];
+        for (const [t, key, rest = 0, pace = 1] of list) {
+          const y = pos[key];
+          if (rest > 0) K.push({ t, y, m: 0 }, { t: t + rest, y, m: 0 });
+          else K.push({ t, y, pace });
+        }
+        K.forEach((k, i) => {
+          if (k.m !== undefined) return;
+          const p = K[i - 1], n = K[i + 1];
+          if (!p || !n) return (k.m = 0);
+          const h0 = k.t - p.t, h1 = n.t - k.t;
+          const d0 = (k.y - p.y) / h0, d1 = (n.y - k.y) / h1;
+          if (d0 * d1 <= 0) return (k.m = 0);
+          const w0 = 2 * h1 + h0, w1 = h1 + 2 * h0;
+          k.m = (k.pace * (w0 + w1)) / (w0 / d0 + w1 / d1);
+        });
+        const raw = (t) => {
+          if (t <= K[0].t) return K[0].y;
+          for (let i = 0; i < K.length - 1; i++) {
+            const a = K[i], b = K[i + 1];
+            if (t >= b.t) continue;
+            const h = b.t - a.t, u = (t - a.t) / h, u2 = u * u, u3 = u2 * u;
+            return (2 * u3 - 3 * u2 + 1) * a.y + (u3 - 2 * u2 + u) * h * a.m + (-2 * u3 + 3 * u2) * b.y + (u3 - u2) * h * b.m;
+          }
+          return K[K.length - 1].y;
+        };
+        const W = 0.2, N = 8;
+        return (t) => {
+          let sum = 0;
+          for (let j = -N; j <= N; j++) sum += raw(t + (j / N) * W);
+          return sum / (2 * N + 1);
+        };
+      }
+
+      // ───────────────────── the mouse pointer ─────────────────────
+      // Position in the site's own pixels (the frame is 1440 wide), or null when the pointer is off screen.
+      function pointerAt(t) {
+        const w = fMac.contentWindow;
+        const find = (spec) => {
+          if (spec.abs) return { x: spec.abs[0], y: spec.abs[1] };
+          const el = w.document.querySelector(spec.el);
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { x: r.left + r.width * spec.at[0], y: r.top + r.height * spec.at[1] };
+        };
+        for (const run of POINTER) {
+          const first = run[0][0], last = run[run.length - 1][0];
+          if (t < first || t > last) continue;
+          let i = 0;
+          while (i < run.length - 2 && t >= run[i + 1][0]) i++;
+          const a = find(run[i][1]), b = find(run[i + 1][1]);
+          if (!a || !b) return null;
+          const u = E.sine(prog(t, run[i][0], run[i + 1][0]));
+          return { x: a.x + (b.x - a.x) * u, y: a.y + (b.y - a.y) * u, alpha: E.out(prog(t, first, first + 0.3)) * (1 - E.io(prog(t, last - 0.4, last))) };
+        }
+        return null;
+      }
+
+      // ───────────────────── driving an iframe ─────────────────────
+      // ScrollTrigger reacts to the browser's own scroll event, which is only fired on the next painted
+      // frame, so after moving the page we wait for it (like a real scroll) before advancing the site's clock.
+      const nextScroll = (w) =>
+        new Promise((resolve) => {
+          w.addEventListener("scroll", () => resolve(), { once: true });
+          setTimeout(resolve, 120);
+        });
+
+      async function place(frame, y) {
+        const w = frame.contentWindow;
+        const moved = Math.abs(w.scrollY - y) >= 1;
+        w.scrollTo(0, y);
+        if (moved) await nextScroll(w);
+      }
+
+      async function tick(frame, t, steps = 1) {
+        const w = frame.contentWindow;
+        for (let i = 0; i < steps; i++) w.__vt.step(1000 / FPS);
+        w.__vt.sync();
+      }
+
+      function setMenu(open) {
+        const d = fPhone.contentDocument;
+        const nav = d.querySelector(".nav");
+        if (nav.classList.contains("is-open") !== open) d.querySelector(".nav__toggle").click();
+      }
+
+      // ───────────────────── composing the scene ─────────────────────
+      function layout(t) {
+        const b = E.out(prog(t, 0, 0.7));
+        const macIn = E.out(prog(t, 0, 1.0));
+        const macOut = E.io(prog(t, SWAP[0], SWAP[1]));
+        brand.style.opacity = b;
+        brand.style.transform = `translate(-50%, ${(1 - b) * -24}px)`;
+        // the logo disc spins like the site's own (4 s per turn), on the reel's clock
+        brandDisc.style.transform = `rotate(${(t / 4) * 360}deg)`;
+
+        const zoom = 1 + 0.11 * E.sine(prog(t, 1.0, MAC_END));
+        mac.style.opacity = macIn * (1 - E.out(prog(t, SWAP[0], SWAP[1] - 0.15)));
+        mac.style.visibility = t >= SWAP[1] ? "hidden" : "visible";
+        mac.style.transform = `translateY(${(1 - macIn) * 70 - 240 * macOut + 4 * Math.sin(t * 1.3)}px) scale(${(0.96 + 0.04 * macIn) * zoom * (1 - 0.1 * macOut)})`;
+
+        const pIn = E.out(prog(t, PHONE_IN[0], PHONE_IN[1]));
+        const pOut = E.io(prog(t, OUTRO[0], OUTRO[1]));
+        phone.style.opacity = pIn;
+        phone.style.transform = `translateY(${(1 - pIn) * 220 - 40 * pOut + 5 * Math.sin(t * 1.1)}px) scale(${(0.95 + 0.05 * pIn) * (1 - 0.05 * pOut)})`;
+
+        TAPS.forEach(([a, z], i) => {
+          const p = prog(t, a, z);
+          const on = p > 0 && p < 1;
+          taps[i].style.opacity = on ? 0.9 * (1 - p) : 0;
+          // the burger sits at (343, 32) in site pixels; the phone screen is 1.4x
+          taps[i].style.left = 480 - 48 + "px";
+          taps[i].style.top = 45 - 48 + "px";
+          taps[i].style.transform = `scale(${0.3 + 0.9 * E.out(p)})`;
+        });
+      }
+
+      let POS = null, PATH = null;
+
+      // One frame is made in two calls from the outside. __prepare puts everything in place (layout, scroll,
+      // menu) and returns where the real mouse has to be, because the site's cursor trail only reacts to a real
+      // mouse; the caller moves it and lets the page repaint. __step then advances the sites' clocks by one frame.
+      window.__prepare = async (t) => {
+        layout(t);
+        if (t < SWAP[1]) await place(fMac, PATH.mac(t));
+        if (t >= MAC_END) {
+          setMenu(t >= MENU[0] && t < MENU[1]);
+          await place(fPhone, PATH.phone(t));
+        }
+        // the pointer is placed by the same numbers as the real mouse: site pixels → scene pixels
+        const p = t < SWAP[1] ? pointerAt(t) : null;
+        if (!p) {
+          pointer.style.opacity = 0;
+          return null;
+        }
+        const r = fMac.getBoundingClientRect();
+        const x = r.left + (p.x * r.width) / 1440, y = r.top + (p.y * r.height) / 900;
+        pointer.style.transform = `translate(${x}px, ${y}px)`;
+        pointer.style.opacity = p.alpha * parseFloat(mac.style.opacity);
+        return { x, y };
+      };
+      // settle > 1 is used for single preview frames, so the animations catch up
+      window.__step = async (t, settle = 1) => {
+        if (t < SWAP[1]) await tick(fMac, t, settle);
+        if (t >= MAC_END) await tick(fPhone, t, settle);
+      };
+      window.__duration = DURATION;
+      window.__fps = FPS;
+      window.__cover = COVER;
+
+      // wait for both sites to load, then read the section positions
+      window.__ready = (async () => {
+        while (!(fMac.dataset.loaded && fPhone.dataset.loaded)) await new Promise((r) => setTimeout(r, 100));
+        await document.fonts.ready;
+        await new Promise((r) => setTimeout(r, 3500)); // site init: fonts, images, layout
+        POS = { mac: measure(fMac, false), phone: measure(fPhone, true) };
+        PATH = { mac: scrollPath(MAC_WP, POS.mac), phone: scrollPath(PHONE_WP, POS.phone) };
+        return POS;
+      })();
+      // for checking the motion: scroll positions at any moment
+      window.__scrollAt = (t) => ({ mac: PATH.mac(t), phone: PATH.phone(t) });
+    </script>
+  </body>
+</html>

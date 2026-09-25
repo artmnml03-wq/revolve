@@ -347,6 +347,15 @@ covers the text that sits at the top of each section (a good proxy for
 elements that are meaningfully displaced from the section's own top edge
 needed their own trigger.
 
+### Bugfix: stats invisible with section 3 exactly filling the screen
+
+Found while rendering the promo reel (2026-09-25): at 1440×900 with section 3
+aligned to the viewport, each `.stat` top sits at ~89% of the viewport —
+below the "top 80%" line — so the counters never started unless the user
+kept scrolling into section 4. Same for the second stats row on phones.
+Stats now use `ownHeightTriggerStart(stat, 0.5)` ("half of the stat
+visible"), the second documented exception next to the footer.
+
 ---
 
 ## Not part of this pass (already existed)

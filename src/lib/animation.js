@@ -71,7 +71,8 @@ export const FOOTER_TRIGGER_AMOUNT = 0.15;
  * re-fires on scroll back up/down past it. Every call on the site uses the
  * default (SCROLL_TRIGGER_START) except the footer, which has its own
  * always-reachable start (see ownHeightTriggerStart) since it's the last
- * thing on the page — that's the one deliberate, documented exception, not
+ * thing on the page, and the section-3 stats (bottom of a 100vh section) —
+ * both documented in ANIMATIONS.md, not
  * a place for per-section values to quietly drift.
  */
 export function onceInView(trigger, onEnter, start = SCROLL_TRIGGER_START) {

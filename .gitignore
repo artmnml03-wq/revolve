@@ -25,3 +25,10 @@ dist-ssr
 
 # Local tooling
 .claude/
+
+# Promo reel (local render only)
+promo/node_modules
+promo/.site
+promo/frames
+promo/preview
+promo/out

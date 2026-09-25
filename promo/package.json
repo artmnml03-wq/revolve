@@ -1,0 +1,14 @@
+{
+  "name": "revolve-promo",
+  "private": true,
+  "type": "module",
+  "description": "Renders the Instagram reel: MacBook (desktop) then iPhone (mobile) with the Revolve site inside.",
+  "scripts": {
+    "site": "cd .. && BASE_PATH=/site/ npx vite build --outDir promo/.site --emptyOutDir",
+    "render": "node render.mjs",
+    "preview": "node render.mjs --frames 0.6,2.4,6,12,16,20.3,22.4,30,34.2,36"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

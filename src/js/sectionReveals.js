@@ -184,7 +184,11 @@ function initCraftedSection() {
       if (label) gsap.set(label, { opacity: 0 });
     }
 
-    onceInView(stat, () => playCounter(numEl));
+    // Start from the stat's OWN height (half of it visible), not "top 80%":
+    // the stats sit at the very bottom of a 100vh section, so with the
+    // section exactly filling the screen (e.g. 1440×900, or the phone's
+    // second row) their top never reaches 80% and they stayed invisible.
+    onceInView(stat, () => playCounter(numEl), ownHeightTriggerStart(stat, 0.5));
   });
 }
 
